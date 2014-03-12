@@ -16,7 +16,8 @@
 -export([doc/1, test/0, flat_format/2, flush_mailbox/0, get_module_name/1,
          is_erl_source/1, funs/1, funs/2, funLine/3, pmap/2, wait_messages/1,
          timer_init/0, timer_start/1, timer/1, timer_stop/1, timer_destroy/0,
-         init_state/0, progress_bar/2, to_elapsed_time/1, to_elapsed_time/2]).
+         init_state/0, progress_bar/2, to_elapsed_time/1, to_elapsed_time/2,
+         wildcards_to_filenames/1]).
 
 -export_type([progress/0]).
 
@@ -312,3 +313,9 @@ traceLoop(Pid, MsgQueueLen, I) ->
         false ->
             receive after 2 -> traceLoop(Pid, MsgQueueLen, I-1) end
     end.
+
+%% -------------------------------------------------------------------
+%% Convert a list of strings with path wildcards to a list of strings with paths
+-spec wildcards_to_filenames([string()]) -> [string()].
+wildcards_to_filenames(Ws) ->
+    lists:flatmap(fun filelib:wildcard/1, Ws).

@@ -503,7 +503,7 @@ help() ->
      "  -t|--target module      Run eunit tests for this module\n"
      "  -t|--target module function [args]\n"
      "                          Specify the function to execute\n"
-     "  -f|--files  modules     Specify the files (modules) to instrument\n"
+     "  -f|--files  modules     Specify the files (modules) to instrument (quoted wildcards allowed)\n"
      "  -pa         Dir         Add Dir to the beginning of the code path\n"
      "  -pz         Dir         Add Dir to the end of the code path\n"
      "  -o|--output file        Specify the output file (default results.txt)\n"
@@ -566,8 +566,10 @@ analyzeAux(Options) ->
                         Msg2 = "no input files specified",
                         {'error', 'arguments', Msg2};
                     {files, Files} ->
+                        %% Retrieve file paths
+                        Files1 = concuerror_util:wildcards_to_filenames(Files),
                         %% Start the analysis
-                        concuerror_sched:analyze(Target, Files, Options)
+                        concuerror_sched:analyze(Target, Files1, Options)
                 end
         end,
     %% Return result

@@ -868,7 +868,8 @@ loadPrefs(Options) ->
     case lists:keyfind('files', 1, Options) of
         false -> continue;
         {'files', Files} ->
-            AbsFiles = [filename:absname(F) || F <- Files],
+            Files1 = concuerror_util:wildcards_to_filenames(Files),
+            AbsFiles = [filename:absname(F) || F <- Files1],
             ErlFiles = [F || F <- AbsFiles, concuerror_util:is_erl_source(F)],
             addListItems(?MODULE_LIST, ErlFiles)
     end,
